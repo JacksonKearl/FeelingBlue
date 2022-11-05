@@ -65,7 +65,7 @@ export async function onRequestPost({ request, env }: { request: Request, env: E
                         const tweetContents = await getTwitterPostData(env.TWITTER_GUEST_TOKEN, data.proof)
                         log.tweet_contents = tweetContents
 
-                        if (tweetContents.toLowerCase().includes('Zabaglione')) {
+                        if (tweetContents.toLowerCase().includes('zabaglione')) {
                             log.verification_succeeded = true
 
                             const node: VerifiedNode = {
