@@ -12,7 +12,7 @@ Twitter verification for the rest of us.
 
 ### Why isn't this in the extension stores? 
 
-For your safety! 
+For your safety!
 
 When installed from the stores, extensions can be updated at any time without your knowledge; when installed like this they can only be updated by you, which means you can verify the code! I recommend you do so - it's well less than 100 lines of natural JavaScript.
 
