@@ -478,6 +478,7 @@
                 } else {
                     const data = await res.json()
                     if (data.paymentLink) {
+                        data.paymentLink += `?prefilled_email=${encodeURIComponent(data.email)}`
                         window.location.href = data.paymentLink
                     } else {
                         console.error('bad data: ' + txt)
