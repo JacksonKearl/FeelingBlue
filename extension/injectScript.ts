@@ -57,12 +57,13 @@ const trackSpan = async (span: HTMLSpanElement) => {
     if (trackedSpans.has(span)) { return }
     trackedSpans.add(span)
     if (span.innerText.startsWith('@')) {
-        const verification = await loadNode(span.innerText.slice(1))
+        const user = span.innerText.slice(1)
+        const verification = await loadNode(user)
         if (verification) {
 
             const badge = document.createElement('a')
             badge.innerText = verification.emoji
-            badge.href = verification.proof
+            badge.href = `https://twitter.com/${user}/status/${verification.proof}`
             badge.style.textDecoration = 'none'
             badge.style.marginLeft = '2px'
             if (span.parentElement) {
