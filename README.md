@@ -19,7 +19,7 @@ When installed from the stores, extensions can be updated at any time without yo
 ## Third party Licenses
 
 ### Stripe.js
-The code used to verify webhook signatures was derived from stripe.js, with modifications by me to work in a Cloudflare worker context.
+The code used to verify webhook signatures was derived from [stripe.js](https://github.com/stripe/stripe-js), with modifications by me to work in a Cloudflare worker context.
 ```md
 MIT License
 

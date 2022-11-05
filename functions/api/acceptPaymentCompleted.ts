@@ -65,7 +65,7 @@ export async function onRequestPost({ request, env }: { request: Request, env: E
                         const tweetContents = await getTwitterPostData(env.TWITTER_GUEST_TOKEN, data.proof)
                         log.tweet_contents = tweetContents
 
-                        if (tweetContents.toLowerCase().includes('#feelingblue')) {
+                        if (tweetContents.toLowerCase().includes('Zabaglione')) {
                             log.verification_succeeded = true
 
                             const node: VerifiedNode = {
@@ -107,7 +107,7 @@ const getTwitterPostData = async (token: string, post: string): Promise<string> 
         const tweet = twitterData?.globalObjects?.tweets?.[post]
         const text = tweet.text
         const created = +new Date(tweet['created_at'])
-        const epoch = +new Date('2022-11-04T01:32:55.232Z')
+        const epoch = +new Date('2020-11-04T01:32:55.232Z')
         if (created < epoch) {
             return 'Timeout.'
         }
