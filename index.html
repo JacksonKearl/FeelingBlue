@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="favicon.ico" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feeling Blue</title>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <style>
+        body {
+            background-color: azure;
+            box-sizing: border-box;
+            text-align: center;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: darkblue;
+        }
+
+        h1,
+        h2,
+        h4,
+        h5 {
+            background-color: aqua;
+        }
+
+        input {
+            max-width: 80%;
+        }
+
+        li {
+            margin: 15px;
+            padding: 15px;
+            background-color: azure;
+        }
+
+        ul {
+            list-style-type: none;
+            background-color: aquamarine;
+        }
+
+        ol {
+            background-color: powderblue;
+        }
+
+        ul,
+        ol {
+            padding: 15px;
+        }
+
+        .buttonbox {
+            background-color: deepskyblue;
+            padding: 15px;
+        }
+
+        .buttonbox>input {
+            background-color: dodgerblue;
+            border: 2px solid dodgerblue;
+
+            width: 80%;
+            color: aliceblue;
+            font-size: 20px;
+            padding: 15px;
+            cursor: pointer;
+        }
+
+        .buttonbox>input:hover {
+            border: 2px solid lightskyblue;
+        }
+
+        .buttonbox>input:disabled,
+        .buttonbox>input:disabled:hover {
+            cursor: unset;
+            border: 2px solid cadetblue;
+            background-color: cadetblue;
+        }
+
+        em {
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .g-recaptcha {
+            margin: 0 auto;
+            display: inline-block;
+        }
+
+        .radio-container {
+            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            background-color: paleturquoise;
+        }
+
+        .radio-container>div {
+            width: 160px;
+            padding: 10px;
+        }
+
+        .error {
+            background-color: red !important;
+            color: aliceblue !important;
+        }
+
+        #emojiexample {
+            background-color: cornflowerblue;
+            color: aliceblue;
+        }
+
+        footer {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: darkturquoise;
+        }
+
+        #diagnostic_test>li {
+            visibility: hidden;
+        }
+
+        #diagnostic_test>li.visible {
+            visibility: visible;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <h1>Feeling Blue</h1>
+        <h2>verification for the rest of us</h2>
+        <h4 id="subtitle">
+            get verified with only 3 simple steps and $4.20 simple dollars
+        </h4>
+        <form id="theForm" onchange="validate()" onsubmit="fetchpost(); return false;">
+            <ul>
+                <li>
+                    first, state your email:
+                    <input type="email" style="width: 110px" name="email" placeholder="email@email.com">
+                    <div></div>
+                    <small>
+                        must match the email you use when paying, or else i'll be forced to consider
+                        your payment a donation
+                    </small>
+                </li>
+                <li>
+                    next, provide proof you're a human. link to a post including <em>both</em> the
+                    <a target="_blank" rel="noopener noreferrer" href="https://twitter.com/hashtag/feelingblue"><span
+                            style="font-family: monospace;">#feelingblue</span></a> hashtag <em>and</em>
+                    convincing evidence of your humanity:
+                    <input type="text" style="width: 270px; max-width: 80%;" name="proof"
+                        placeholder="https://twitter.com/MyUsername/status/PostID">
+                    <div class="error" id="prooferror"></div>
+                    <small>
+                        true humans will know what such evidence entails
+                        <br>
+                        convincing deemed insufficiently humanoid will result in a 🤖 emoji or forfeiture of assets
+                        <br>
+                        this is permanent! funds received trying to change an existing emoji will be treated as a
+                        donation
+                    </small>
+                </li>
+                <li>
+                    finally, declare the emoji you'd like appended to your handle:
+                    <input type="text" style="width: 15px;" onchange="validate()" name="emoji">
+                    <div class="error" id="emojierror"></div>
+                    <small id="emojiexamplemessage"></small>
+                    <div id="emojiexample"></div>
+                    <small>
+                        note! this will only be visible to the community of browser extension users...
+                        <br />
+                        elon ain't finna hook everyone up to some hobo's data
+                    </small>
+                </li>
+            </ul>
+            <div class="buttonbox">
+                <input id="next" onclick="showNext()" disabled type="button" value="Next">
+            </div>
+            <div id="nextSection" style="display: none;">
+                <h4>
+                </h4>
+                <ul>
+                    <li>
+                        based on the provided responses, your humanity is in question. please answer via the following
+                        diagnostic test:
+                        <ol id="diagnostic_test" style="margin-top: 10px;">
+                            <li>
+                                I am able to critically reason about my surroundings
+                                <div class="radio-container">
+                                    <div>
+                                        <input id="11" type="radio" name="reason" value="ta" />
+                                        <label for="11">Strongly Agree</label>
+                                    </div>
+                                    <div>
+                                        <input id="12" type="radio" name="reason" value="la" />
+                                        <label for="12">Slightly Agree</label>
+                                    </div>
+                                    <div>
+                                        <input id="13" type="radio" name="reason" value="ld" />
+                                        <label for="13">Slightly Disagree</label>
+                                    </div>
+                                    <div>
+                                        <input id="14" type="radio" name="reason" value="td" />
+                                        <label for="14">Strongly Disagree</label>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                I know when statements should not be taken for their literal meaning
+                                <div class="radio-container">
+                                    <div>
+                                        <input id="21" type="radio" name="literal" value="ta" />
+                                        <label for="21">Strongly Agree</label>
+                                    </div>
+                                    <div>
+                                        <input id="22" type="radio" name="literal" value="la" />
+                                        <label for="22">Slightly Agree</label>
+                                    </div>
+                                    <div>
+                                        <input id="23" type="radio" name="literal" value="ld" />
+                                        <label for="23">Slightly Disagree</label>
+                                    </div>
+                                    <div>
+                                        <input id="24" type="radio" name="literal" value="td" />
+                                        <label for="24">Strongly Disagree</label>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                the answer to life's toughest questions is usually Love
+                                <div class="radio-container">
+                                    <div>
+                                        <input id="31" type="radio" name="love" value="ta" />
+                                        <label for="31">Strongly Agree</label>
+                                    </div>
+                                    <div>
+                                        <input id="32" type="radio" name="love" value="la" />
+                                        <label for="32">Slightly Agree</label>
+                                    </div>
+                                    <div>
+                                        <input id="33" type="radio" name="love" value="ld" />
+                                        <label for="33">Slightly Disagree</label>
+                                    </div>
+                                    <div>
+                                        <input id="34" type="radio" name="love" value="td" />
+                                        <label for="34">Strongly Disagree</label>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                only the Creator can Judge - the best Humans can do is Mediate
+                                <div class="radio-container">
+                                    <div>
+                                        <input id="41" type="radio" name="judge" value="ta" />
+                                        <label for="41">Strongly Agree</label>
+                                    </div>
+                                    <div>
+                                        <input id="42" type="radio" name="judge" value="la" />
+                                        <label for="42">Slightly Agree</label>
+                                    </div>
+                                    <div>
+                                        <input id="43" type="radio" name="judge" value="ld" />
+                                        <label for="43">Slightly Disagree</label>
+                                    </div>
+                                    <div>
+                                        <input id="44" type="radio" name="judge" value="td" />
+                                        <label for="44">Strongly Disagree</label>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                kanYe West made Graduation
+                                <div class="radio-container">
+                                    <div>
+                                        <input id="51" type="radio" name="ye" value="ta" />
+                                        <label for="51">Strongly Agree</label>
+                                    </div>
+                                    <div>
+                                        <input id="52" type="radio" name="ye" value="la" />
+                                        <label for="52">Slightly Agree</label>
+                                    </div>
+                                    <div>
+                                        <input id="53" type="radio" name="ye" value="ld" />
+                                        <label for="53">Slightly Disagree</label>
+                                    </div>
+                                    <div>
+                                        <input id="54" type="radio" name="ye" value="td" />
+                                        <label for="54">Strongly Disagree</label>
+                                    </div>
+                                </div>
+                            </li>
+                            <li style="position: relative;">
+                                <div style="height: 80px;"></div>
+                                <div style="position: absolute; top: 15px; left: 15px;" class="g-recaptcha"
+                                    data-sitekey="6LcyhNUiAAAAAKc6tQ1Y1KWU14K9O-DtF7MPsWoj"></div>
+                            </li>
+                        </ol>
+                    </li>
+                </ul>
+                <div class="buttonbox">
+                    <input id="submit" disabled type="submit" value="Proceed to Payment">
+                </div>
+            </div>
+            </div>
+        </form>
+    </main>
+    <footer id="footer">
+        <a href="http://github.com/JacksonKearl/FeelingBlue">Source</a>
+        |
+        <a href="/privacy">Legal</a>
+    </footer>
+</body>
+
+<script>
+
+    function injectScript() {
+        const choices = [
+            'Genesis 2:25',
+            'Job 6:6',
+            'John 5:19',
+            'John 12:49',
+            'John 13:34-5',
+            'Matthew 13:3-9',
+        ]
+
+        const choice = choices[Math.floor(Math.random() * choices.length)]
+        const footer = document.getElementById('footer')
+        const divider = document.createElement('span')
+        divider.textContent = ' | '
+        footer.appendChild(divider)
+        const script = document.createElement('a')
+        script.textContent = choice
+        script.href = `https://www.biblegateway.com/verse/en/${encodeURIComponent(choice)}`
+        script.target = "_blank"
+        script.rel = "noopener noreferrer"
+        footer.appendChild(script)
+    }
+
+    injectScript()
+
+    function getFormData() {
+        let form = document.getElementById("theForm")
+        let data = new FormData(form)
+        let body = {}
+        for (let [key, value] of data) {
+            key = key.replace(/-/g, '')
+            body[key] = value
+        }
+        return body
+    }
+
+    async function showNext() {
+        const nextButton = document.getElementById('next')
+        nextButton.disabled = true
+        nextButton.value = 'Processing'
+        for (let i = 0; i < 10; i++) {
+            await new Promise(c => setTimeout(c, 250))
+            nextButton.value += '.'
+
+            if (Math.random() < i / 10) {
+                break
+            }
+        }
+
+        nextButton.value = 'error! see below.'
+        nextButton.classList.add('error')
+
+        const nextSection = document.getElementById('nextSection')
+        nextSection.style.display = ''
+        const subtitle = document.getElementById('subtitle')
+        subtitle.innerText = `Get verified for only 4 simple steps and $4.20 simple dollars`
+    }
+
+    let lastSeenData = ''
+    let lastSeenValidation = undefined
+    const revalidateTimer = setInterval(validate, 250)
+    function validate() {
+        const formData = getFormData()
+        const serialized = JSON.stringify(formData)
+
+        if (serialized === lastSeenData) {
+            return lastSeenValidation
+        }
+
+        lastSeenData = serialized
+
+        console.log(formData)
+
+        const { email, proof, emoji } = formData
+        const nextButton = document.getElementById('next')
+        const submitButton = document.getElementById('submit')
+        const proofError = document.getElementById('prooferror')
+        const emojiError = document.getElementById('emojierror')
+        const emojiExample = document.getElementById('emojiexample')
+        const emojiExampleMessage = document.getElementById('emojiexamplemessage')
+
+        let disabled = false
+        if (!email || !emoji || !proof) {
+            disabled = true
+        }
+        emojiError.innerText = ''
+        if (!isSingleGlyph(emoji)) {
+            disabled = true
+            emojiError.innerText = ''
+            if (emoji.length) {
+                emojiError.innerText = 'Must be single emoji.'
+            }
+        }
+
+        emojiExample.innerText = ''
+        emojiExampleMessage.innerText = ''
+        proofError.innerText = ''
+        const parseTwitter = /https:\/\/twitter.com\/([^/]*)\/status\/(\d*)/.exec(proof)
+
+        if (!parseTwitter) {
+            disabled = true
+            if (proof.length) {
+                proofError.innerText = 'Proof link in unexpected format.'
+            }
+        } else {
+            const [_, name] = parseTwitter
+            if (name && emoji && !emojiError.innerText) {
+                emojiExampleMessage.innerText = 'Your name will display as:'
+                emojiExample.innerText = `@${name} ${emoji}`
+            }
+        }
+
+        nextButton.disabled = disabled || nextButton.value !== 'Next'
+
+        const { love, reason, ye, literal, judge } = formData
+        const answerCount = !!love + !!reason + !!ye + !!literal + !!judge
+        if (answerCount !== 5) {
+            disabled = true
+        }
+
+        const survey = document.getElementById('diagnostic_test')
+        let i = 0
+        for (const child of survey.children) {
+            if (i <= answerCount) {
+                child.classList.add('visible')
+            }
+            i++
+        }
+
+        const { grecaptcharesponse } = formData
+        if (!grecaptcharesponse) {
+            disabled = true
+        }
+
+        submitButton.disabled = disabled
+        lastSeenValidation = !disabled
+        return !disabled
+    }
+
+    async function fetchpost() {
+
+        if (!validate()) {
+            alert("Please complete all questions to the best of your unique ability!")
+            return false
+        }
+
+        const data = getFormData()
+
+        const submitButton = document.getElementById('submit')
+        submitButton.value = 'Loading...'
+        submitButton.disabled = true
+
+        fetch("/api/acceptVerificationRequest", {
+            method: "post",
+            body: JSON.stringify(data)
+        })
+            .then(async (res) => {
+                if (res.status >= 400) {
+                    const message = await res.text()
+                    submitButton.value = message
+                    submitButton.classList.add('error')
+                } else {
+                    const data = await res.json()
+                    if (data.paymentLink) {
+                        window.location.href = data.paymentLink
+                    } else {
+                        console.error('bad data: ' + txt)
+                    }
+                }
+            }).catch(e => console.error(e))
+
+        return false
+    }
+
+    // thanks Rimas Kudelis
+    // https://stackoverflow.com/questions/43242440/javascript-regular-expression-for-unicode-emoji/68146409#68146409
+    const isSingleGlyph = (s) => /^(\p{RI}\p{RI}|\p{Emoji}(\p{EMod}+|\u{FE0F}\u{20E3}?|[\u{E0020}-\u{E007E}]+\u{E007F})?(\u{200D}\p{Emoji}(\p{EMod}+|\u{FE0F}\u{20E3}?|[\u{E0020}-\u{E007E}]+\u{E007F})?)+|\p{EPres}(\p{EMod}+|\u{FE0F}\u{20E3}?|[\u{E0020}-\u{E007E}]+\u{E007F})?|\p{Emoji}(\p{EMod}+|\u{FE0F}\u{20E3}?|[\u{E0020}-\u{E007E}]+\u{E007F}))$/u.test(s)
+
+</script>
+
+</html>
